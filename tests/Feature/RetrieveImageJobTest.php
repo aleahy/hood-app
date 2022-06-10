@@ -47,7 +47,8 @@ class RetrieveImageJobTest extends TestCase
 
         Storage::disk('images')->assertMissing($expectedFilename);
 
-        (new RetrieveImageJob($image))->handle();
+        $job = new RetrieveImageJob($image);
+        app()->call([$job, 'handle']);
 
         Storage::disk('images')->assertExists($expectedFilename);
 
@@ -68,7 +69,8 @@ class RetrieveImageJobTest extends TestCase
             'path' => null,
         ]);
 
-        (new RetrieveImageJob($image))->handle();
+        $job = new RetrieveImageJob($image);
+        app()->call([$job, 'handle']);
 
         Event::assertDispatched(function (ImageRetrievedEvent $event) use ($image) {
             return $image->is($event->image);
