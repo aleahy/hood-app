@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Images\ImagesIndexController;
 use App\Http\Controllers\Images\StoreImageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,4 +23,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 Route::middleware(['auth:sanctum'])->group(function() {
     Route::post('/images', StoreImageController::class)
         ->name('images.store');
+
+    Route::get('/images', ImagesIndexController::class)
+        ->name('images.index');
 });
