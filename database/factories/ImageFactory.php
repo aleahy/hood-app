@@ -17,7 +17,9 @@ class ImageFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'uri' => $this->faker->imageUrl(),
+            'filename' => null,
+            'path' => null,
         ];
     }
 }

@@ -9,4 +9,9 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
     use LazilyRefreshDatabase;
+
+    public function getTestImagePath($filename)
+    {
+        return __DIR__ . '/Images/' . $filename;
+    }
 }
