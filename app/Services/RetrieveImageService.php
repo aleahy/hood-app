@@ -17,11 +17,9 @@ class RetrieveImageService
 
         Storage::disk('images')->put($uniqueFilename, $contents);
 
-        $originalFilename = $this->getOriginalFilename($image);
 
         $image->update([
-            'filename' => $originalFilename,
-            'path' => Storage::disk('images')->path($uniqueFilename)
+            'filename' => $uniqueFilename,
         ]);
 
         ImageRetrievedEvent::dispatch($image);

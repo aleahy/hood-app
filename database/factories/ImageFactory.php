@@ -21,7 +21,6 @@ class ImageFactory extends Factory
             'user_id' => User::factory(),
             'uri' => $this->faker->imageUrl(),
             'filename' => null,
-            'path' => null,
             'created_at' => $this->faker->dateTimeBetween('-10 days'),
         ];
     }

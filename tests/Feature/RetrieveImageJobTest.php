@@ -40,7 +40,6 @@ class RetrieveImageJobTest extends TestCase
         $image = Image::factory()->create([
             'uri' => $this->getTestImagePath('cat.jpg'),
             'filename' => null,
-            'path' => null,
         ]);
 
         $expectedFilename = Str::uuid() . '.jpg';
@@ -52,8 +51,7 @@ class RetrieveImageJobTest extends TestCase
 
         Storage::disk('images')->assertExists($expectedFilename);
 
-        $this->assertEquals('cat.jpg', $image->refresh()->filename);
-        $this->assertEquals(Storage::disk('images')->path($expectedFilename), $image->path);
+        $this->assertEquals($expectedFilename, $image->refresh()->filename);
     }
 
     /**
@@ -66,7 +64,6 @@ class RetrieveImageJobTest extends TestCase
         $image = Image::factory()->create([
             'uri' => $this->getTestImagePath('cat.jpg'),
             'filename' => null,
-            'path' => null,
         ]);
 
         $job = new RetrieveImageJob($image);

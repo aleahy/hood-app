@@ -18,7 +18,6 @@ return new class extends Migration
             $table->id();
             $table->string('uri');
             $table->string('filename')->nullable();
-            $table->string('path')->nullable();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
