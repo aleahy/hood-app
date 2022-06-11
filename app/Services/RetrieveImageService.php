@@ -3,40 +3,81 @@
 namespace App\Services;
 
 use App\Events\ImageRetrievedEvent;
+use App\Exceptions\RetrieveImageService\ExtensionNotFoundException;
+use App\Exceptions\RetrieveImageService\ImageNotObtainableException;
+use App\Exceptions\RetrieveImageService\InvalidMimeTypeException;
+use App\Exceptions\RetrieveImageService\TempFileFailureException;
 use App\Models\Image;
+use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class RetrieveImageService
 {
     public function retrieveAndStoreImage(Image $image)
     {
-        $contents = $this->getFileFromURI($image);
+            $tempFile = $this->getFileFromURI($image);
 
-        $uniqueFilename = $this->createUniqueFilename($image);
+            $this->validateMimeTypes($tempFile);
 
-        Storage::disk('images')->put($uniqueFilename, $contents);
+            $uniqueFilename = $this->createUniqueFilename($tempFile);
 
+            Storage::disk('images')->put($uniqueFilename, file_get_contents($tempFile));
 
-        $image->update([
-            'filename' => $uniqueFilename,
-        ]);
+            $image->update([
+                'filename' => $uniqueFilename,
+            ]);
 
-        ImageRetrievedEvent::dispatch($image);
+            ImageRetrievedEvent::dispatch($image);
     }
+
 
     protected function getFileFromURI(Image $image)
     {
-        return file_get_contents($image->uri);
+        $stream = @fopen($image->uri, 'r');
+        if (! $stream) {
+            throw new ImageNotObtainableException($image->uri);
+        }
+
+        $tempFile = tempnam(sys_get_temp_dir(), 'img_');
+        if (! $tempFile) {
+            throw new TempFileFailureException($image->uri);
+        }
+
+        file_put_contents($tempFile, $stream);
+
+        return $tempFile;
     }
 
-    protected function createUniqueFilename(Image $image)
+    /**
+     * @param string $tempFile
+     * @return void
+     * @throws InvalidMimeTypeException
+     */
+    protected function validateMimeTypes(string $tempFile): void
     {
-        return Str::uuid() . '.' . pathinfo($image->uri, PATHINFO_EXTENSION);
+        $validator = Validator::make(
+            ['file' => new File($tempFile)],
+            ['file' => 'mimes:jpg,jpeg,png,bmp,gif,svg,webp']
+        );
+        if ($validator->fails()) {
+            throw new InvalidMimeTypeException($tempFile);
+        }
     }
 
-    protected function getOriginalFilename(Image $image)
+    /**
+     * @param string $tempFile
+     * @return string
+     * @throws ExtensionNotFoundException
+     */
+    protected function createUniqueFilename(string $tempFile): string
     {
-        return pathinfo($image->uri, PATHINFO_BASENAME);
+        $file = new File($tempFile);
+        $extension = $file->guessExtension();
+        if (! $extension) {
+            throw new ExtensionNotFoundException($tempFile);
+        }
+        return Str::uuid() . '.' . $extension;
     }
 }

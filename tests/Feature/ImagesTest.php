@@ -32,15 +32,13 @@ class ImagesTest extends TestCase
             ->assertSuccessful()
             ->assertJson([
                 'uri' => $this->getTestImagePath('cat.jpg'),
-                'filename' => null,
-                'path' => null,
+                'url' => null,
             ]);
 
         $this->assertDatabaseHas('images', [
             'user_id' => $user->id,
             'uri' => $this->getTestImagePath('cat.jpg'),
             'filename' => null,
-            'path' => null,
         ]);
     }
 
