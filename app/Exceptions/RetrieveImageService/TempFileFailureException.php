@@ -2,9 +2,7 @@
 
 namespace App\Exceptions\RetrieveImageService;
 
-use Exception;
-
-class TempFileFailureException extends Exception
+class TempFileFailureException extends ImageRetrievalFailedException
 {
     public function __construct(string $uri)
     {

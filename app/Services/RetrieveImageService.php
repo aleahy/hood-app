@@ -2,13 +2,16 @@
 
 namespace App\Services;
 
+use App\Events\ImageRetrievalFailedEvent;
 use App\Events\ImageRetrievedEvent;
 use App\Exceptions\RetrieveImageService\ExtensionNotFoundException;
 use App\Exceptions\RetrieveImageService\ImageNotObtainableException;
+use App\Exceptions\RetrieveImageService\ImageRetrievalFailedException;
 use App\Exceptions\RetrieveImageService\InvalidMimeTypeException;
 use App\Exceptions\RetrieveImageService\TempFileFailureException;
 use App\Models\Image;
 use Illuminate\Http\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -17,6 +20,7 @@ class RetrieveImageService
 {
     public function retrieveAndStoreImage(Image $image)
     {
+        try {
             $tempFile = $this->getFileFromURI($image);
 
             $this->validateMimeTypes($tempFile);
@@ -30,6 +34,12 @@ class RetrieveImageService
             ]);
 
             ImageRetrievedEvent::dispatch($image);
+        }
+        catch(ImageRetrievalFailedException $exception) {
+            Log::error($exception->getMessage());
+
+            ImageRetrievalFailedEvent::dispatch($image);
+        }
     }
 
 

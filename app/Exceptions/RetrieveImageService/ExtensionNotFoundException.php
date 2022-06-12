@@ -2,9 +2,7 @@
 
 namespace App\Exceptions\RetrieveImageService;
 
-use Exception;
-
-class ExtensionNotFoundException extends Exception
+class ExtensionNotFoundException extends ImageRetrievalFailedException
 {
     public function __construct(string $filename)
     {

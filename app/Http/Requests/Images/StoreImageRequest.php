@@ -30,7 +30,6 @@ class StoreImageRequest extends FormRequest
                 'max:255',
                 'min:5',
                 'ends_with:.jpg,.jpeg,.png,.bmp,.gif,.svg,.webp',
-
             ]
         ];
     }

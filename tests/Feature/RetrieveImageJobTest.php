@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Events\ImageRetrievalFailedEvent;
 use App\Events\ImageRetrievedEvent;
 use App\Jobs\RetrieveImageJob;
 use App\Models\Image;
@@ -72,6 +73,25 @@ class RetrieveImageJobTest extends TestCase
         Event::assertDispatched(function (ImageRetrievedEvent $event) use ($image) {
             return $image->is($event->image);
         });
+    }
 
+    /**
+     * @test
+     */
+    public function test_it_dispatches_an_event_on_failure()
+    {
+        Event::assertNothingDispatched();
+
+        $image = Image::factory()->create([
+            'uri' => 'http://www.example.com',
+            'filename' => null,
+        ]);
+
+        $job = new RetrieveImageJob($image);
+        app()->call([$job, 'handle']);
+
+        Event::assertDispatched(function (ImageRetrievalFailedEvent $event) use ($image) {
+            return $image->is($event->image);
+        });
     }
 }

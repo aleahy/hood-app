@@ -2,9 +2,7 @@
 
 namespace App\Exceptions\RetrieveImageService;
 
-use Exception;
-
-class ImageNotObtainableException extends Exception
+class ImageNotObtainableException extends ImageRetrievalFailedException
 {
     public function __construct(string $uri)
     {

@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use App\Http\Resources\ImageResource;
 use App\Models\Image;
 use App\Models\User;
 use Illuminate\Broadcasting\Channel;
@@ -14,7 +13,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
 
-class ImageRetrievedEvent implements ShouldBroadcast
+class ImageRetrievalFailedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -24,8 +23,8 @@ class ImageRetrievedEvent implements ShouldBroadcast
      * @return void
      */
     public function __construct(public Image $image)
-    {
-    }
+    {}
+
 
     /**
      * Get the channels the event should broadcast on.
@@ -43,9 +42,7 @@ class ImageRetrievedEvent implements ShouldBroadcast
             'image' => [
                 'id' => $this->image->id,
                 'uri' => $this->image->uri,
-                'url' => Storage::disk('images')->url($this->image->filename)
             ]
         ];
     }
-
 }

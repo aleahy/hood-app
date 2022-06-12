@@ -2,9 +2,7 @@
 
 namespace App\Exceptions\RetrieveImageService;
 
-use Exception;
-
-class InvalidMimeTypeException extends Exception
+class InvalidMimeTypeException extends ImageRetrievalFailedException
 {
     public function __construct(string $filename)
     {
