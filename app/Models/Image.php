@@ -16,4 +16,8 @@ class Image extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function scopeOwnedBy($query, $user) {
+        return $query->where('user_id', $user->id);
+    }
 }

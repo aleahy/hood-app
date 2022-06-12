@@ -11,6 +11,8 @@ class ImagesIndexController extends Controller
 {
     public function __invoke()
     {
-        return ImageResource::collection(auth()->user()->images);
+        $images = Image::OwnedBy(auth()->user())
+                    ->paginate(12);
+        return ImageResource::collection($images);
     }
 }
