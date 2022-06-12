@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Images\ImagesIndexController;
 use App\Http\Controllers\Images\StoreImageController;
+use App\Http\Controllers\Users\SelfController;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
@@ -18,11 +20,10 @@ use Illuminate\Support\Facades\Route;
 */
 Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::middleware(['auth:sanctum'])->group(function() {
+    Route::get('/user', SelfController::class)
+        ->name('users.self');
+
     Route::post('/images', StoreImageController::class)
         ->name('images.store');
 
