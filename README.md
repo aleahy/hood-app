@@ -8,7 +8,7 @@ In order to be able to run this application, you will need the following:
 * Mysql
 
 ### Installation
-1. Clone this git repository to a local folder.
+1. Clone this git repository to a local folder and cd into the folder.
 2. Install the packages with composer
 ```bash
 composer install
@@ -32,4 +32,4 @@ php artisan serve
 php artisan queue:work
 php artisan websockets:serve
 ```
-Then proceed with installation of the front end git respository.
+Then proceed with installation of the [front end git respository](https://github.com/aleahy/hood-front).
