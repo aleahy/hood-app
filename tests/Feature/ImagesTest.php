@@ -93,7 +93,9 @@ class ImagesTest extends TestCase
         $this->actingAs($user)
             ->getJson(route('images.index'))
             ->assertOk()
-            ->assertExactJson($expectedResults);
+            ->assertJson([
+                'data' => $expectedResults
+            ]);
 
     }
 
@@ -108,6 +110,8 @@ class ImagesTest extends TestCase
         $this->actingAs(User::factory()->create())
             ->getJson(route('images.index'))
             ->assertSuccessful()
-            ->assertExactJson([]);
+            ->assertJson([
+                'data' => []
+            ]);
     }
 }

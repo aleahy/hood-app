@@ -22,7 +22,7 @@ class ImageRetrievedEvent implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct(private Image $image)
+    public function __construct(public Image $image)
     {
     }
 
