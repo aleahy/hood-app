@@ -94,4 +94,24 @@ class RetrieveImageJobTest extends TestCase
             return $image->is($event->image);
         });
     }
+
+    /**
+     * @test
+     */
+    public function test_it_dispatches_failure_event_for_invalid_mime_type()
+    {
+        Event::assertNothingDispatched();
+
+        $image = Image::factory()->create([
+            'uri' => $this->getTestImagePath('placeholder.pdf'),
+            'filename' => null,
+        ]);
+
+        $job = new RetrieveImageJob($image);
+        app()->call([$job, 'handle']);
+
+        Event::assertDispatched(function (ImageRetrievalFailedEvent $event) use ($image) {
+            return $image->is($event->image);
+        });
+    }
 }

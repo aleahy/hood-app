@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Images;
 
+use App\Services\RetrieveImageService;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreImageRequest extends FormRequest
@@ -23,13 +24,17 @@ class StoreImageRequest extends FormRequest
      */
     public function rules()
     {
+        $extensions = RetrieveImageService::getMimeTypeCollection()
+            ->map(fn($type) => '.' . $type)
+            ->join(',');
+
         return [
             'image_uri' => [
                 'required',
                 'string',
                 'max:255',
                 'min:5',
-                'ends_with:.jpg,.jpeg,.png,.bmp,.gif,.svg,.webp',
+                'ends_with:'. $extensions,
             ]
         ];
     }
