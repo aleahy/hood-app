@@ -9,8 +9,12 @@ In order to be able to run this application, you will need the following:
 
 ### Installation
 1. Clone this git repository to a local folder.
-2. Rename `.env.example` to `.env` and enter your database credentials
-3. Generate an app key
+2. Install the packages with composer
+```bash
+composer install
+```
+3. Rename `.env.example` to `.env` and enter your database credentials
+4. Generate an app key
 ```bash
 php artisan key:generate
 ```
@@ -18,7 +22,11 @@ php artisan key:generate
 ```bash
 php artisan migrate
 ```
-4. Start the services.
+4. Link the public storage folder to the public folder.
+```bash
+php artisan storage:link
+```
+5. Start the services.
 ```bash
 php artisan serve
 php artisan queue:work
