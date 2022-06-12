@@ -37,6 +37,11 @@ class ImageRetrievedEvent implements ShouldBroadcast
         return new PrivateChannel(User::getPrivateBroadcastChannelForUserId($this->image->user_id));
     }
 
+    /**
+     * The data the event should supply
+     *
+     * @return array[]
+     */
     public function broadcastWith()
     {
         return [

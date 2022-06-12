@@ -50,11 +50,22 @@ class User extends Authenticatable
     }
 
 
+    /**
+     * Get a user's private channel from the address id
+     *
+     * @param int $user_id
+     * @return string
+     */
     public static function getPrivateBroadcastChannelForUserId(int $user_id)
     {
         return 'App.Models.User.' . $user_id;
     }
 
+    /**
+     * The user's private channel
+     *
+     * @return Attribute
+     */
     public function privateChannel(): Attribute
     {
         return Attribute::make(

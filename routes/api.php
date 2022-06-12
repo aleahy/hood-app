@@ -3,8 +3,6 @@
 use App\Http\Controllers\Images\ImagesIndexController;
 use App\Http\Controllers\Images\StoreImageController;
 use App\Http\Controllers\Users\SelfController;
-use App\Http\Resources\UserResource;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +27,4 @@ Route::middleware(['auth:sanctum'])->group(function() {
 
     Route::get('/images', ImagesIndexController::class)
         ->name('images.index');
-
-
 });
